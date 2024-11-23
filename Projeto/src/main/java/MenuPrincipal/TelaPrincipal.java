@@ -1,6 +1,7 @@
 package MenuPrincipal;
 
 import Aluno.AlunoView;
+import BancoDeDados.Database;
 import Matricula.MatriculaView;
 import Notas.NotaView;
 
@@ -52,6 +53,10 @@ public class TelaPrincipal extends JFrame {
     }
 
     public static void main(String[] args) {
+        // Configurar o banco de dados antes de iniciar a interface gráfica
+        Database.setupDatabase();
+
+        // Iniciar a interface gráfica
         SwingUtilities.invokeLater(() -> TelaPrincipal.getInstance().setVisible(true));
     }
 }

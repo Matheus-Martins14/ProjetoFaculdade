@@ -17,6 +17,7 @@ public class Database {
         } catch (ClassNotFoundException e) {
             throw new SQLException("Driver do SQLite não encontrado. Verifique se o .jar está no classpath.", e);
         }
+        // Retorna a conexão
         return DriverManager.getConnection(URL);
     }
 
@@ -24,6 +25,13 @@ public class Database {
     public static void setupDatabase() {
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
+
+            // Verificar conexão
+            if (conn == null) {
+                System.err.println("Falha na conexão com o banco de dados.");
+                return;
+            }
+
             // Criar tabela Alunos
             stmt.execute("""
                 CREATE TABLE IF NOT EXISTS alunos (
@@ -34,6 +42,7 @@ public class Database {
                     email TEXT NOT NULL
                 );
             """);
+            System.out.println("Tabela 'alunos' criada ou já existente.");
 
             // Criar tabela Matrículas
             stmt.execute("""
@@ -46,6 +55,7 @@ public class Database {
                     FOREIGN KEY(aluno_id) REFERENCES alunos(id)
                 );
             """);
+            System.out.println("Tabela 'matriculas' criada ou já existente.");
 
             // Criar tabela Notas
             stmt.execute("""
@@ -58,6 +68,7 @@ public class Database {
                     FOREIGN KEY(aluno_id) REFERENCES alunos(id)
                 );
             """);
+            System.out.println("Tabela 'notas' criada ou já existente.");
 
             System.out.println("Banco de dados configurado com sucesso!");
         } catch (SQLException e) {
